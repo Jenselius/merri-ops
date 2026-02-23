@@ -1,4 +1,4 @@
-// Static Language Loading System for Jenselius Strategy & Ops
+// Static Language Loading System for Merri Strategy & Ops
 // This version loads translations from JSON files for GitHub Pages compatibility
 
 let translations = {};
@@ -63,16 +63,16 @@ function switchLanguage(lang) {
     setLanguage(lang);
 }
 
-// Email form functionality
+// Email form functionality - OLD VERSION (keeping for backward compatibility)
 function toggleEmailForm() {
     const form = document.getElementById('email-form');
     const button = document.querySelector('[onclick="toggleEmailForm()"]');
     
-    if (form.style.display === 'none' || form.style.display === '') {
+    if (form && form.style.display === 'none' || form.style.display === '') {
         form.style.display = 'block';
         const buttonText = currentLanguage === 'de' ? 'Formular schließen' : 'Close Form';
         button.textContent = buttonText;
-    } else {
+    } else if (form) {
         form.style.display = 'none';
         const buttonText = currentLanguage === 'de' ? 'E-Mail hinterlegen' : 'Access Strategic Resources';
         button.textContent = buttonText;
@@ -120,11 +120,54 @@ document.addEventListener('DOMContentLoaded', function() {
             switchLanguage(lang);
         });
     });
+    
+    // NEW: Email Form Handler for Resources Section - Shows Download Links
+    const resourcesForm = document.getElementById('resourcesForm');
+    const thankYouSection = document.getElementById('thankYouSection');
+    
+    if (resourcesForm && thankYouSection) {
+        console.log('✅ Resources form found - adding event listener');
+        
+        resourcesForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent form submission
+            
+            console.log('📧 Resources form submitted');
+            
+            // Get the email input value
+            const emailInput = this.querySelector('input[type="email"]');
+            const email = emailInput.value;
+            
+            console.log('Email:', email);
+            
+            // Basic email validation
+            if (email && email.includes('@')) {
+                console.log('✅ Email valid - showing download links');
+                
+                // Hide the form
+                resourcesForm.style.display = 'none';
+                
+                // Show the thank you section with download links
+                thankYouSection.classList.remove('hidden');
+                thankYouSection.style.display = 'block';
+                
+                // Optional: Log to console for tracking
+                console.log('Email submitted:', email);
+                
+                // Scroll to the download links
+                thankYouSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                console.log('❌ Invalid email');
+                alert('Please enter a valid email address.');
+            }
+        });
+    } else {
+        console.log('ℹ️ Resources form not found on this page (normal for resource pages)');
+    }
 });
 
-// Calendly integration
+// Calendly integration - UPDATED URL
 function openCalendly() {
-    window.open('https://calendly.com/jenselius-strategy-ops/30min', '_blank');
+    window.open('https://calendly.com/giulia-merri-ops/30min', '_blank');
 }
 
 // Make functions globally available
